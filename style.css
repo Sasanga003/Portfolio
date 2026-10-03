@@ -666,7 +666,7 @@ section {
 .projects-slider {
   position: relative;
 }
-/* Clip sideways only, so the card hover lift and glow stay visible */
+
 .projects-viewport {
   overflow-x: clip;
 }
@@ -714,6 +714,8 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
   opacity: 0;
   transition: 0.3s;
 }
@@ -810,6 +812,7 @@ section {
   font-size: 1.5rem;
   color: var(--text-muted);
   line-height: 1.8;
+  text-align: justify;
 }
 
 /* Certificate images */

@@ -494,6 +494,9 @@
               <div class="project-img">
                 <img src="./images/TaskMateApp.jpg" alt="TaskMate App" />
                 <div class="project-overlay">
+                  <span class="img-count"
+                    ><i class="fa-solid fa-mobile-screen"></i> 6</span
+                  >
                   <a
                     href="https://github.com/Sasanga003/TaskMate---Android-App"
                     target="_blank"
@@ -519,6 +522,40 @@
                   user authentication, with the UI/UX designed and prototyped in
                   Figma.
                 </p>
+                <button
+                  type="button"
+                  class="card-gallery-btn shots-btn"
+                  data-shots="./images/taskmate_1.jpg,./images/taskmate_2.jpg,./images/taskmate_3.jpg,./images/taskmate_4.jpg,./images/taskmate_5.jpg,./images/taskmate_6.jpg,./images/taskmate_7.jpg, ./images/taskmate_8.jpg, ./images/taskmate_9.jpg"
+                >
+                  <i class="fa-solid fa-mobile-screen"></i> View Screens
+                </button>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-img">
+                <img
+                  src="./images/harvest_project.png"
+                  alt="Agricultural Subsidy Management System"
+                />
+                <span class="img-count"
+                  ><i class="fa-solid fa-images"></i> 13</span
+                >
+              </div>
+              <div class="project-info">
+                <h3>Agricultural Subsidy Management System</h3>
+                <p>
+                  A group project mobile and web application for managing
+                  agricultural subsidies, with the UI/UX designed and prototyped
+                  in Figma.
+                </p>
+                <button
+                  type="button"
+                  class="card-gallery-btn"
+                  id="agri-gallery-btn"
+                  data-images="./images/1.jpg,./images/2.png,./images/3.png,./images/4.jpg,./images/5.png,./images/6.png,./images/7.jpg,./images/8.jpg,./images/9.jpg,./images/10.jpg,./images/11.jpg,./images/12.jpg,./images/13.jpg"
+                >
+                  <i class="fa-solid fa-images"></i> View Images
+                </button>
               </div>
             </div>
           </div>
@@ -808,7 +845,28 @@
       <button class="lightbox-close" id="lightbox-close">
         <i class="fa-solid fa-xmark"></i>
       </button>
+      <button
+        class="lightbox-nav lightbox-prev"
+        id="lightbox-prev"
+        aria-label="Previous image"
+      >
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button
+        class="lightbox-nav lightbox-next"
+        id="lightbox-next"
+        aria-label="Next image"
+      >
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
       <img src="" alt="" id="lightbox-img" />
+    </div>
+    <!-- SCREENS VIEWER -->
+    <div class="shots-modal" id="shots-modal">
+      <button class="lightbox-close" id="shots-close" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="shots-strip" id="shots-strip"></div>
     </div>
 
     <!-- PAGE TRANSITION OVERLAY -->

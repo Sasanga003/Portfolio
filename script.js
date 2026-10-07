@@ -136,7 +136,7 @@ const lightboxImg = document.getElementById("lightbox-img");
 const lightboxClose = document.getElementById("lightbox-close");
 
 function closeLightbox() {
-  lightbox.classList.remove("active");
+  lightbox.classList.remove("active", "gallery");
   document.body.style.overflow = "";
 }
 
@@ -161,6 +161,77 @@ certImages.forEach((item) => {
     document.body.style.overflow = "hidden";
   });
 });
+
+/* ===========================
+   PROJECT IMAGE GALLERY
+=========================== */
+const galleryBtn = document.getElementById("agri-gallery-btn");
+const lightboxPrev = document.getElementById("lightbox-prev");
+const lightboxNext = document.getElementById("lightbox-next");
+let galleryImages = [];
+let galleryIndex = 0;
+
+function showGalleryImage() {
+  lightboxImg.src = galleryImages[galleryIndex];
+}
+
+function stepGallery(dir) {
+  galleryIndex =
+    (galleryIndex + dir + galleryImages.length) % galleryImages.length;
+  showGalleryImage();
+}
+
+if (galleryBtn) {
+  galleryBtn.addEventListener("click", () => {
+    galleryImages = galleryBtn.dataset.images.split(",");
+    galleryIndex = 0;
+    showGalleryImage();
+    lightbox.classList.add("active", "gallery");
+    document.body.style.overflow = "hidden";
+  });
+}
+
+lightboxPrev.addEventListener("click", () => stepGallery(-1));
+lightboxNext.addEventListener("click", () => stepGallery(1));
+document.addEventListener("keydown", (e) => {
+  if (!lightbox.classList.contains("gallery")) return;
+  if (e.key === "ArrowLeft") stepGallery(-1);
+  if (e.key === "ArrowRight") stepGallery(1);
+});
+/* ===========================
+   SCREENS VIEWER (mobile screenshots)
+=========================== */
+const shotsModal = document.getElementById("shots-modal");
+const shotsStrip = document.getElementById("shots-strip");
+const shotsClose = document.getElementById("shots-close");
+
+function closeShots() {
+  shotsModal.classList.remove("active");
+  shotsStrip.innerHTML = "";
+  document.body.style.overflow = "";
+}
+
+document.querySelectorAll(".shots-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    shotsStrip.innerHTML = "";
+    btn.dataset.shots.split(",").forEach((src, i) => {
+      const img = document.createElement("img");
+      img.src = src.trim();
+      img.alt = `Screen ${i + 1}`;
+      shotsStrip.appendChild(img);
+    });
+    shotsModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  });
+});
+
+shotsClose.addEventListener("click", closeShots);
+shotsModal.addEventListener("click", (e) => {
+  if (e.target === shotsModal) closeShots();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeShots();
+});
 /* ===========================
    CERTIFICATES — SEE MORE
 =========================== */
@@ -180,12 +251,8 @@ if (seeMoreBtn) {
       : 'See More <i class="fa-solid fa-chevron-down"></i>';
 
     if (expanded && extraCerts.length > 0) {
-      // Scroll so the newly revealed certificates come into view
       extraCerts[0].scrollIntoView({ behavior: "smooth", block: "center" });
     } else if (certificationsSection) {
-      // Collapsing shrinks the page height, which can leave the viewport
-      // sitting over whatever section is now below — go back to the
-      // beginning of the Certifications section instead.
       certificationsSection.scrollIntoView({
         behavior: "smooth",
         block: "start",
@@ -226,8 +293,6 @@ const contactFields = [
   "contact-message-field",
 ];
 
-// Requires text@domain.extension — covers gmail.com, yahoo.com, any
-// @example.com style address, not just a bare "@" like the browser default.
 const emailFormatPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 const contactFieldMessages = {
@@ -251,8 +316,6 @@ contactFields.forEach((fieldId) => {
   const error = document.getElementById(fieldId.replace("-field", "-error"));
   if (!field || !error) return;
 
-  // Once the field has any text, clear the error immediately — the full
-  // check (including email format) only runs again on the next submit.
   field.addEventListener("input", () => {
     if (field.value.trim() !== "") {
       field.classList.remove("field-invalid");

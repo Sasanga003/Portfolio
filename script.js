@@ -263,18 +263,36 @@ function closeShots() {
   document.body.style.overflow = "";
 }
 
+const shotsMQ = window.matchMedia("(max-width: 850px)");
+
+// Landscape (Subsidy) images scroll vertically on small screens
+function applyShotsMode() {
+  const isWide = shotsStrip.classList.contains("wide");
+  shotsModal.classList.toggle("vertical", isWide && shotsMQ.matches);
+  shotsStrip.scrollTop = 0;
+  shotsStrip.scrollLeft = 0;
+}
+
 document.querySelectorAll(".shots-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     shotsStrip.innerHTML = "";
+    shotsStrip.classList.toggle("wide", btn.hasAttribute("data-wide"));
     btn.dataset.shots.split(",").forEach((src, i) => {
       const img = document.createElement("img");
       img.src = src.trim();
       img.alt = `Screen ${i + 1}`;
+      img.loading = "lazy";
       shotsStrip.appendChild(img);
     });
+    applyShotsMode();
     shotsModal.classList.add("active");
     document.body.style.overflow = "hidden";
   });
+});
+
+// Switch modes live while the window is being resized
+shotsMQ.addEventListener("change", () => {
+  if (shotsModal.classList.contains("active")) applyShotsMode();
 });
 
 shotsClose.addEventListener("click", closeShots);

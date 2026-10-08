@@ -1677,3 +1677,10 @@ section {
 .lightbox.gallery img {
   max-width: calc(100% - 16rem);
 }
+/* Landscape screenshots (Subsidy system) in the horizontal viewer */
+.shots-strip.wide img {
+  height: auto;
+  width: min(85vw, 96rem);
+  max-height: 80vh;
+  object-fit: contain;
+}

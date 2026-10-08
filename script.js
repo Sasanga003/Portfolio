@@ -1,4 +1,25 @@
 /* ===========================
+   LOADING SCREEN
+=========================== */
+const loader = document.getElementById("loader");
+const loaderStart = Date.now();
+const MIN_LOAD_TIME = 1000;
+
+document.body.style.overflow = "hidden";
+
+function hideLoader() {
+  if (!loader || loader.classList.contains("hidden")) return;
+  const wait = Math.max(0, MIN_LOAD_TIME - (Date.now() - loaderStart));
+  setTimeout(() => {
+    loader.classList.add("hidden");
+    document.body.style.overflow = "";
+  }, wait);
+}
+
+window.addEventListener("load", hideLoader);
+setTimeout(hideLoader, 6000);
+
+/* ===========================
    THEME TOGGLE
 =========================== */
 const themeToggle = document.getElementById("theme-toggle");
@@ -69,9 +90,7 @@ if (copyEmailBtn) {
           icon.className = "fa-regular fa-copy";
         }, 2000);
       })
-      .catch(() => {
-        // Clipboard API unavailable — fail silently, card link still works
-      });
+      .catch(() => {});
   });
 }
 
@@ -181,15 +200,48 @@ function stepGallery(dir) {
   showGalleryImage();
 }
 
-if (galleryBtn) {
-  galleryBtn.addEventListener("click", () => {
-    galleryImages = galleryBtn.dataset.images.split(",");
+const subsidyMQ = window.matchMedia("(max-width: 850px)");
+let subsidyList = [];
+let subsidyOpen = false;
+
+function renderSubsidyGallery() {
+  if (!subsidyOpen) return;
+
+  if (subsidyMQ.matches) {
+    // Phones and tablets: vertical scrolling list
+    lightbox.classList.remove("active", "gallery");
+    shotsStrip.innerHTML = "";
+    subsidyList.forEach((src, i) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = `Subsidy system screen ${i + 1}`;
+      img.loading = "lazy";
+      shotsStrip.appendChild(img);
+    });
+    shotsStrip.scrollTop = 0;
+    shotsModal.classList.add("active", "vertical");
+  } else {
+    // Desktop: lightbox with arrows
+    shotsModal.classList.remove("active", "vertical");
+    shotsStrip.innerHTML = "";
+    galleryImages = subsidyList;
     galleryIndex = 0;
     showGalleryImage();
     lightbox.classList.add("active", "gallery");
-    document.body.style.overflow = "hidden";
+  }
+  document.body.style.overflow = "hidden";
+}
+
+if (galleryBtn) {
+  galleryBtn.addEventListener("click", () => {
+    subsidyList = galleryBtn.dataset.images.split(",").map((s) => s.trim());
+    subsidyOpen = true;
+    renderSubsidyGallery();
   });
 }
+
+// Switch modes live while the window is being resized
+subsidyMQ.addEventListener("change", renderSubsidyGallery);
 
 lightboxPrev.addEventListener("click", () => stepGallery(-1));
 lightboxNext.addEventListener("click", () => stepGallery(1));
@@ -206,7 +258,7 @@ const shotsStrip = document.getElementById("shots-strip");
 const shotsClose = document.getElementById("shots-close");
 
 function closeShots() {
-  shotsModal.classList.remove("active");
+  shotsModal.classList.remove("active", "vertical");
   shotsStrip.innerHTML = "";
   document.body.style.overflow = "";
 }

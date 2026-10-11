@@ -1904,3 +1904,48 @@ section {
 .design-card:hover .design-media-logo img {
   transform: none;
 }
+.design-slider {
+  position: relative;
+  margin-bottom: 6rem;
+}
+.design-viewport {
+  overflow-x: clip;
+}
+.design-track {
+  --per-view: 3;
+  display: flex;
+  gap: 3rem;
+  transition: transform 0.5s ease;
+}
+.design-track .design-card {
+  flex: 0 0 calc((100% - (var(--per-view) - 1) * 3rem) / var(--per-view));
+}
+
+@media (max-width: 1100px) {
+  .design-track {
+    --per-view: 2;
+  }
+}
+@media (max-width: 850px) {
+  .design-track {
+    --per-view: 1;
+  }
+  .design-slider {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 2rem;
+    row-gap: 3rem;
+  }
+  .design-viewport {
+    order: 1;
+    width: 100%;
+  }
+  .design-slider .slider-prev {
+    order: 2;
+  }
+  .design-slider .slider-next {
+    order: 3;
+  }
+}

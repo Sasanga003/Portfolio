@@ -538,3 +538,41 @@ document
     el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
     observer.observe(el);
   });
+/* ===========================
+   DESIGN SLIDERS
+=========================== */
+document.querySelectorAll(".design-slider").forEach((slider) => {
+  const track = slider.querySelector(".design-track");
+  const prev = slider.querySelector(".design-prev");
+  const next = slider.querySelector(".design-next");
+  const cards = track.querySelectorAll(".design-card");
+  let index = 0;
+
+  function update() {
+    const perView =
+      parseInt(getComputedStyle(track).getPropertyValue("--per-view"), 10) || 3;
+    const maxIndex = Math.max(0, cards.length - perView);
+    index = Math.min(index, maxIndex);
+
+    const step =
+      cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : 0;
+    track.style.transform = `translateX(${-index * step}px)`;
+
+    const needsArrows = maxIndex > 0;
+    prev.hidden = !needsArrows;
+    next.hidden = !needsArrows;
+    prev.disabled = index === 0;
+    next.disabled = index === maxIndex;
+  }
+
+  prev.addEventListener("click", () => {
+    index--;
+    update();
+  });
+  next.addEventListener("click", () => {
+    index++;
+    update();
+  });
+  window.addEventListener("resize", update);
+  update();
+});

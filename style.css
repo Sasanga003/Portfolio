@@ -1936,3 +1936,7 @@ html::-webkit-scrollbar-thumb:hover {
     scrollbar-color: var(--purple) var(--bg);
   }
 }
+/* this Hides page scrollbar while the loading screen is visible */
+html:has(.loader:not(.hidden)) {
+  overflow: hidden;
+}
